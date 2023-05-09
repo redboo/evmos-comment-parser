@@ -1,0 +1,8 @@
+DOMAIN = "https://commonwealth.im/"
+DISCUSSION_URL = f"{DOMAIN}evmos/discussion/"
+API_URL = f"{DOMAIN}api/"
+API_BULK_URL = f"{API_URL}bulkThreads?chain=evmos"
+API_COMMENTS_URL = f"{API_URL}viewComments?chain=evmos&thread_id="
+API_REACTIONS_URL = f"{API_URL}reactionsCounts"
+API_PROFILES_URL = f"{API_URL}getAddressProfile"
+DOWNLOAD_DIR = "downloads"
