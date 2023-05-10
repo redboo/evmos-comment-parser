@@ -19,7 +19,7 @@ async def get_threads(
     end_date: datetime | None,
     likes: dict[int, int],
     profiles: dict[str, str] | None = None,
-) -> None:
+) -> bool:
     """
     Получает список тредов и записывает их и комментарии в CSV-файл.
 
@@ -27,14 +27,18 @@ async def get_threads(
         - `output_filename (str)`: Имя файла для записи результатов.
         - `session (aiohttp.ClientSession)`: Сессия aiohttp для выполнения HTTP-запросов.
         - `threads (list[dict[str, Any]])`: Список словарей, представляющих треды на форуме.
-        - `start_date (datetime | None)`: Начальная дата для фильтрации по времени создания треда или его последнего комментария.
-        - `end_date (datetime | None)`: Конечная дата для фильтрации по времени создания треда или его последнего комментария.
+        - `start_date (datetime | None)`: Начальная дата для фильтрации по времени создания треда или его последнего
+          комментария.
+        - `end_date (datetime | None)`: Конечная дата для фильтрации по времени создания треда или его последнего
+          комментария.
         - `likes (dict[int, int])`: Словарь, в котором ключ - это идентификатор треда, а значение - число лайков.
-        - `profiles (dict[str, str] | None)`: Словарь, в котором ключ - это адрес кошелька, а значение - имя пользователя.
+        - `profiles (dict[str, str] | None)`: Словарь, в котором ключ - это адрес кошелька, а значение - имя
+          пользователя.
             Используется для замены адреса автора треда на его имя пользователя в CSV-файле.
 
     Возвращает:
         `None`"""
+    written = False
     with open(output_filename, "a", encoding="utf-8", newline="") as output_file:
         csv_writer = csv.writer(output_file, quoting=csv.QUOTE_MINIMAL)
         for thread in threads:
@@ -68,6 +72,7 @@ async def get_threads(
                             thread_url,
                         ]
                     )
+                written = True
                 logging.info(f"Записан тред [{thread_title}] и {len(comments)} комментариев {thread_url}")
             else:
                 if (start_date and thread_created_date < start_date) or (end_date and thread_created_date > end_date):
@@ -86,4 +91,6 @@ async def get_threads(
                         thread_url,
                     ]
                 )
+                written = True
                 logging.info(f"Записан тред [{thread_title}] {thread_url}")
+    return written

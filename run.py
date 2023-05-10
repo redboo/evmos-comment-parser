@@ -31,6 +31,8 @@ async def main(profiles: dict = {}) -> None:
         start_time = time.monotonic()
         logging.info("Парсер запущен.")
 
+        written = False
+
         os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
         async with aiohttp.ClientSession() as session:
@@ -45,7 +47,7 @@ async def main(profiles: dict = {}) -> None:
                     profiles = get_profiles(list(profile_addresses))
                 likes = get_reactions_count(thread_ids)
                 filename = create_csv_file()
-                await get_threads(filename, session, threads, start_date, end_date, likes, profiles)
+                written = await get_threads(filename, session, threads, start_date, end_date, likes, profiles)
 
         if not args.interval:
             break
@@ -53,7 +55,10 @@ async def main(profiles: dict = {}) -> None:
         elapsed_time = max(time.monotonic() - start_time, 0)
         await asyncio.sleep(max(args.interval - elapsed_time, 0))
 
-    logging.info("Программа завершена.")
+    if written:
+        logging.info(f"Программа завершена. Результаты сохранены в {filename}")
+    else:
+        logging.info("Программа завершена. Результатов не найдено.")
 
 
 if __name__ == "__main__":
