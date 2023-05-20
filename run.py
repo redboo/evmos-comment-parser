@@ -15,7 +15,7 @@ from logging_utils import setup_logging
 from reactions_count import get_reactions_count
 
 
-async def main(profiles: dict = {}) -> None:
+async def main(profiles: dict | None = None) -> None:
     args = parse_args()
     setup_logging(args.log)
 
