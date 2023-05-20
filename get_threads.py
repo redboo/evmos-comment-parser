@@ -72,7 +72,6 @@ async def get_threads(
                             thread_url,
                         ]
                     )
-                written = True
                 logging.info(f"Записан тред [{thread_title}] и {len(comments)} комментариев {thread_url}")
             else:
                 if (start_date and thread_created_date < start_date) or (end_date and thread_created_date > end_date):
@@ -91,6 +90,6 @@ async def get_threads(
                         thread_url,
                     ]
                 )
-                written = True
                 logging.info(f"Записан тред [{thread_title}] {thread_url}")
+            written = True
     return written
