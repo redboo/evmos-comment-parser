@@ -45,15 +45,14 @@ async def get_comments(
             comments_data = await response.json()
             for comment in comments_data["result"]:
                 comment_date = datetime.strptime(comment["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
-                if not start_date or start_date <= comment_date:
-                    if not end_date or comment_date <= end_date:
-                        comments.append(
-                            {
-                                "text": comment["plaintext"].replace("\n", " "),
-                                "date": comment["updated_at"],
-                                "address": comment["Address"]["address"],
-                                "likes": len(comment["reactions"]),
-                            }
-                        )
+                if (not start_date or start_date <= comment_date) and (not end_date or comment_date <= end_date):
+                    comments.append(
+                        {
+                            "text": comment["plaintext"].replace("\n", " "),
+                            "date": comment["updated_at"],
+                            "address": comment["Address"]["address"],
+                            "likes": len(comment["reactions"]),
+                        }
+                    )
 
     return comments
