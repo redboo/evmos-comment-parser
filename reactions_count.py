@@ -1,12 +1,13 @@
+from __future__ import annotations
+
 import logging
-from typing import Dict, List
 
 import requests
 
 from constants import API_REACTIONS_URL
 
 
-def get_reactions_count(ids: List[int]) -> Dict[int, int]:
+def get_reactions_count(ids: list[int]) -> dict[int, int]:
     """
     Получает количество реакций (лайков) для заданных идентификаторов тредов
     и комментариев.
